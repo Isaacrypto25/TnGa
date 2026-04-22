@@ -683,11 +683,7 @@ async function sendAgent() {
             result = "Erro ao executar tool: " + e.message;
           }
 
-          if (tu.name === "github_read_file" && tu.input.path) {
-            fullReply += `\n\n\ud83d\udcc2 **${tu.name}:** \`${tu.input.path}\` carregado \u2014 veja na aba \u270e Editor.`;
-          } else {
-            fullReply += `\n\n\ud83d\udd27 **${tu.name}:**\n${result}`;
-          }
+          fullReply += `\n\n\ud83d\udd27 **${tu.name}:**\n${result}`;
           addLog("success", tu.name.toUpperCase().replace(/_/g,"-"), "OK");
 
           toolResults.push({ type:"tool_result", tool_use_id: tu.id, content: result });
