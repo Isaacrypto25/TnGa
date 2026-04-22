@@ -100,7 +100,6 @@
             <input id="key-render" class="api-input" type="password"
               placeholder="rnd_..." autocomplete="off" oninput="onKeyInput('render')" />
             <button class="api-toggle-btn" onclick="toggleVisibility('key-render', this)">👁</button>
-            <button class="api-test-btn" id="test-render" onclick="testRenderKey()">TESTAR</button>
           </div>
         </div>
         <div class="api-field">
@@ -108,6 +107,8 @@
           <input id="key-render-service" class="api-input" type="text"
             placeholder="srv-..." style="width:100%;" />
           <div class="api-hint">Render Dashboard → seu serviço → Settings</div>
+        </div>
+        <div class="api-hint" style="color:var(--text-dim);font-size:9px;margin-top:4px;">⚠ A API do Render bloqueia testes diretos do browser (CORS). Cole a key e salve — ela será usada normalmente pelo agente.</div>
         </div>
       </div>
 
