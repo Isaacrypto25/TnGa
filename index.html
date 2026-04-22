@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🦀 Claw DevOps Agent v2</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/agent.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ SETUP SCREEN (shown when no Anthropic key) ═══ -->
+  <div id="setup-screen" class="show">
+    <div class="setup-card">
+      <div class="setup-icon">🦀</div>
+      <div class="setup-title">CLAW DEVOPS AGENT</div>
+      <div class="setup-desc">
+        Configure suas API Keys para conectar o agente ao GitHub, Render, Supabase e à IA Claude.<br><br>
+        Suas chaves são salvas apenas localmente no navegador e nunca enviadas a servidores externos.
+      </div>
+      <button class="setup-btn" onclick="openApiModal()">⚙ CONFIGURAR API KEYS →</button>
+    </div>
+  </div>
+
+  <!-- ═══ API KEYS MODAL ═══════════════════════════════ -->
+  <div id="api-modal-overlay">
+    <div id="api-modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">⚙ CONFIGURAR API KEYS</div>
+          <div class="modal-subtitle">CONECTE OS SERVIÇOS • SALVO LOCALMENTE</div>
+        </div>
+        <button class="modal-close" onclick="closeApiModal()">✕</button>
+      </div>
+
+      <!-- ANTHROPIC -->
+      <div class="api-section">
+        <div class="api-section-title">
+          ✦ CLAUDE AI — ANTHROPIC
+          <span id="status-anthropic" class="api-status-indicator none"></span>
+        </div>
+        <div class="api-field">
+          <div class="api-label">
+            <span class="api-label-name">ANTHROPIC_API_KEY</span>
+            <span id="text-status-anthropic" style="font-size:9px;color:var(--text-dim);">não configurada</span>
+          </div>
+          <div class="api-input-wrap">
+            <input id="key-anthropic" class="api-input" type="password"
+              placeholder="sk-ant-api03-..." autocomplete="off" oninput="onKeyInput('anthropic')" />
+            <button class="api-toggle-btn" onclick="toggleVisibility('key-anthropic', this)">👁</button>
+            <button class="api-test-btn" id="test-anthropic" onclick="testAnthropicKey()">TESTAR</button>
+          </div>
+          <div class="api-hint">
+            Obtenha em <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>
+            — Obrigatório para o agente funcionar.
+          </div>
+        </div>
+      </div>
+
+      <!-- GITHUB -->
+      <div class="api-section">
+        <div class="api-section-title">
+          ◈ GITHUB
+          <span id="status-github" class="api-status-indicator none"></span>
+        </div>
+        <div class="api-field">
+          <div class="api-label">
+            <span class="api-label-name">GITHUB_TOKEN</span>
+            <span id="text-status-github" style="font-size:9px;color:var(--text-dim);">não configurado</span>
+          </div>
+          <div class="api-input-wrap">
+            <input id="key-github" class="api-input" type="password"
+              placeholder="ghp_..." autocomplete="off" oninput="onKeyInput('github')" />
+            <button class="api-toggle-btn" onclick="toggleVisibility('key-github', this)">👁</button>
+            <button class="api-test-btn" id="test-github" onclick="testGithubKey()">TESTAR</button>
+          </div>
+        </div>
+        <div class="api-field">
+          <div class="api-label"><span class="api-label-name">GITHUB_REPO</span></div>
+          <input id="key-github-repo" class="api-input" type="text"
+            placeholder="usuario/repositorio" style="width:100%;" />
+          <div class="api-hint">Exemplo: <code style="color:var(--accent)">octocat/hello-world</code></div>
+        </div>
+      </div>
+
+      <!-- RENDER -->
+      <div class="api-section">
+        <div class="api-section-title">
+          ◉ RENDER.COM
+          <span id="status-render" class="api-status-indicator none"></span>
+        </div>
+        <div class="api-field">
+          <div class="api-label">
+            <span class="api-label-name">RENDER_API_KEY</span>
+            <span id="text-status-render" style="font-size:9px;color:var(--text-dim);">não configurado</span>
+          </div>
+          <div class="api-input-wrap">
+            <input id="key-render" class="api-input" type="password"
+              placeholder="rnd_..." autocomplete="off" oninput="onKeyInput('render')" />
+            <button class="api-toggle-btn" onclick="toggleVisibility('key-render', this)">👁</button>
+            <button class="api-test-btn" id="test-render" onclick="testRenderKey()">TESTAR</button>
+          </div>
+        </div>
+        <div class="api-field">
+          <div class="api-label"><span class="api-label-name">RENDER_SERVICE_ID</span></div>
+          <input id="key-render-service" class="api-input" type="text"
+            placeholder="srv-..." style="width:100%;" />
+          <div class="api-hint">Render Dashboard → seu serviço → Settings</div>
+        </div>
+      </div>
+
+      <!-- SUPABASE -->
+      <div class="api-section">
+        <div class="api-section-title">
+          ◆ SUPABASE
+          <span id="status-supabase" class="api-status-indicator none"></span>
+        </div>
+        <div class="api-field">
+          <div class="api-label">
+            <span class="api-label-name">SUPABASE_URL</span>
+            <span id="text-status-supabase" style="font-size:9px;color:var(--text-dim);">não configurado</span>
+          </div>
+          <input id="key-supabase-url" class="api-input" type="text"
+            placeholder="https://xxxx.supabase.co" style="width:100%;" oninput="onKeyInput('supabase')" />
+        </div>
+        <div class="api-field">
+          <div class="api-label"><span class="api-label-name">SUPABASE_SERVICE_KEY</span></div>
+          <div class="api-input-wrap">
+            <input id="key-supabase" class="api-input" type="password"
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." autocomplete="off" oninput="onKeyInput('supabase')" />
+            <button class="api-toggle-btn" onclick="toggleVisibility('key-supabase', this)">👁</button>
+            <button class="api-test-btn" id="test-supabase" onclick="testSupabaseKey()">TESTAR</button>
+          </div>
+          <div class="api-hint">Use a <strong style="color:var(--yellow)">service_role key</strong> (não a anon key).</div>
+        </div>
+      </div>
+
+      <div id="api-saved-banner" class="api-saved-banner" style="display:none;">
+        ✓ Configurações salvas com sucesso!
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="clearAllKeys()">🗑 LIMPAR TUDO</button>
+        <button class="btn-secondary" onclick="closeApiModal()">CANCELAR</button>
+        <button class="btn-primary"   onclick="saveApiKeys()">💾 SALVAR E CONECTAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CRITICAL ALERT ══════════════════════════════ -->
+  <div id="critical-alert">
+    <div class="alert-title" id="alert-title">⚠ ERRO DETECTADO</div>
+    <div class="alert-msg"   id="alert-msg"></div>
+    <div class="alert-btns">
+      <button class="alert-analyze" onclick="analyzeFromAlert()">🤖 ANALISAR</button>
+      <button class="alert-dismiss" onclick="dismissAlert()">IGNORAR</button>
+    </div>
+  </div>
+
+  <!-- ═══ HEADER ══════════════════════════════════════ -->
+  <div id="header">
+    <div id="header-logo">
+      <span class="logo-icon">🦀</span>
+      <div>
+        <div class="logo-title">CLAW DEVOPS AGENT</div>
+        <div class="logo-sub">AUTONOMOUS INFRASTRUCTURE CONTROL v2</div>
+      </div>
+    </div>
+    <div id="header-right">
+      <div id="conn-status" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+      <button id="pending-notify" onclick="switchTab('approvals')">
+        ◎ <span id="pending-count">0</span> PENDENTES
+      </button>
+      <button id="config-btn" onclick="openApiModal()">⚙ API KEYS</button>
+      <span id="header-err-badge"></span>
+    </div>
+  </div>
+
+  <!-- ═══ TABS ════════════════════════════════════════ -->
+  <div id="tabs"><!-- built by tabs.js --></div>
+
+  <!-- ═══ CONTENT PANES ════════════════════════════════ -->
+  <div id="content">
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard">
+      <div class="grid-auto mb-16" id="dash-metrics"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="sec-title"><span class="s-icon">⚡</span><span class="s-label">Workflow Runs</span></div>
+          <div id="workflows-list"></div>
+        </div>
+        <div class="card">
+          <div class="sec-title"><span class="s-icon">📡</span><span class="s-label">Render — Métricas Live</span></div>
+          <div id="dash-bars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title">
+          <span class="s-icon">📋</span><span class="s-label">Log Stream Recente</span>
+          <span id="log-count-badge" class="badge" style="background:var(--accent-dim);color:var(--accent);border:1px solid rgba(47,120,240,.2);"></span>
+        </div>
+        <div id="dash-log-preview" style="font-size:10px;line-height:1.9;"></div>
+      </div>
+    </div>
+
+    <!-- GITHUB -->
+    <div id="tab-github" style="display:none;">
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">◈</span><span class="s-label">Repositório GitHub</span></div>
+        <div class="grid-auto" id="github-metrics"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">🔀</span><span class="s-label">Pull Requests</span></div>
+        <div id="pr-list"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">🐛</span><span class="s-label">Issues</span></div>
+        <div id="issues-list"></div>
+      </div>
+    </div>
+
+    <!-- RENDER -->
+    <div id="tab-render" style="display:none;">
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">◉</span><span class="s-label">Render.com — Serviço</span></div>
+        <div class="grid-auto" id="render-metrics"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">📊</span><span class="s-label">Performance em Tempo Real</span></div>
+        <div id="render-bars"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">🚀</span><span class="s-label">Deploys Recentes</span></div>
+        <div id="deploys-list"></div>
+      </div>
+    </div>
+
+    <!-- SUPABASE -->
+    <div id="tab-supabase" style="display:none;">
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">◆</span><span class="s-label">Supabase — Database</span></div>
+        <div class="grid-auto" id="sb-metrics"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title"><span class="s-icon">🗄️</span><span class="s-label">Tabelas</span></div>
+        <div id="tables-list"></div>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div id="tab-logs" style="display:none;">
+      <div class="card" style="display:flex;flex-direction:column;height:calc(100vh - 195px);">
+        <div class="sec-title">
+          <span class="s-icon">≡</span><span class="s-label">Log Stream — Tempo Real</span>
+          <span id="log-count-badge2" class="badge" style="background:var(--accent-dim);color:var(--accent);border:1px solid rgba(47,120,240,.2);"></span>
+        </div>
+        <div id="log-scroll" style="flex:1;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- ERRORS -->
+    <div id="tab-errors" style="display:none;">
+      <div class="flex justify-between items-center mb-16">
+        <span id="errors-title" style="color:var(--red);font-weight:700;font-size:13px;"></span>
+        <button class="btn" onclick="clearErrors()">LIMPAR</button>
+      </div>
+      <div id="errors-list"></div>
+    </div>
+
+    <!-- APPROVALS -->
+    <div id="tab-approvals" style="display:none;">
+      <div class="mb-16">
+        <div style="color:var(--yellow);font-weight:700;font-size:13px;margin-bottom:6px;">◎ Ações de Alto Risco — Aguardando Aprovação</div>
+        <div style="color:var(--text-dim);font-size:10px;">Revise cada ação antes de aprovar. Ações rejeitadas são descartadas permanentemente.</div>
+      </div>
+      <div id="approvals-list"></div>
+    </div>
+
+    <!-- AGENT -->
+    <div id="tab-agent" style="display:none;">
+      <div id="agent-section">
+        <div class="card">
+          <div class="sec-title">
+            <span class="s-icon">✦</span>
+            <span class="s-label">Agente Autônomo — Claude AI</span>
+            <span id="agent-status-badge" class="badge" style="background:var(--green-dim);color:var(--green);border:1px solid rgba(15,217,138,.3);">PRONTO</span>
+          </div>
+          <div id="quick-prompts">
+            <button class="quick-btn" onclick="setAgentPrompt('Liste todos os arquivos do repositório na raiz')">📁 Listar arquivos</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Liste todas as branches do repositório')">🌿 Ver branches</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Mostre os últimos 10 commits da branch main')">📜 Histórico commits</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Liste as issues abertas do repositório')">🐛 Issues abertas</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Liste os Pull Requests abertos')">🔀 Pull Requests</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Leia o arquivo backend/server.js')">📄 Ler server.js</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Crie o arquivo backend/routes/auth.js com um endpoint de login JWT completo e faça commit na branch main')">✨ Criar arquivo + push</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Crie uma branch chamada feature/nova-feature a partir de main')">🌿 Criar branch</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Reestruture todo o frontend: crie um index.html moderno, style.css e app.js com boas práticas — faça commit de todos os arquivos de uma vez na branch main')">🚀 Push múltiplos arquivos</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Crie um PR da branch develop para main com título e descrição completos')">🔀 Criar PR</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Analisar erros recentes do Render')">⚠ Erros do Render</button>
+            <button class="quick-btn" onclick="setAgentPrompt('Status completo do sistema')">📡 Status sistema</button>
+          </div>
+          <div id="chat-messages"></div>
+          <div id="agent-thinking"><span class="spin">◌</span> Processando com Claude AI...</div>
+          <div id="chat-input-row">
+            <input id="agent-input" type="text"
+              placeholder="Instrua o agente… (Enter para enviar)"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){sendAgent();event.preventDefault();}" />
+            <button id="agent-send" onclick="sendAgent()">ENVIAR →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITOR -->
+    <div id="tab-editor" style="display:none;">
+      <div id="editor-panel">
+        <div id="file-tree">
+          <div id="file-tree-header">
+            <span>✎ ARQUIVOS</span>
+            <button onclick="addNewFile()" class="btn" style="padding:2px 8px;font-size:9px;">+ NOVO</button>
+          </div>
+          <div id="file-list"></div>
+        </div>
+        <div id="editor-main">
+          <div id="editor-toolbar">
+            <span id="editor-filename" style="color:var(--text);font-size:11px;font-weight:700;flex:1;">Selecione um arquivo</span>
+            <span id="editor-status" class="text-xs text-dim"></span>
+            <button class="btn" onclick="saveCurrentFile()" style="font-size:9px;padding:4px 10px;color:var(--green);border-color:rgba(15,217,138,.3);">Ctrl+S SALVAR</button>
+          </div>
+          <textarea id="code-editor"
+            placeholder="Selecione um arquivo na árvore ao lado..."
+            oninput="onEditorInput()"
+            onkeydown="handleEditorKeydown(event)"
+            spellcheck="false"></textarea>
+          <div id="ai-edit-bar">
+            <span class="text-xs" style="color:var(--purple);white-space:nowrap;">✦ IA:</span>
+            <input id="ai-edit-instruction" type="text"
+              placeholder="Descreva a mudança que a IA deve aplicar neste arquivo…"
+              onkeydown="if(event.key==='Enter')applyAiEdit()" />
+            <button class="ai-edit-btn" onclick="applyAiEdit()">✦ APLICAR IA</button>
+          </div>
+          <div id="editor-footer">
+            <span class="stat" id="editor-stat-lines"></span>
+            <span class="stat" style="margin-left:12px;" id="editor-stat-chars"></span>
+            <span class="stat" style="margin-left:12px;color:var(--yellow);" id="editor-modified-badge"></span>
+            <button class="editor-save-btn" onclick="saveCurrentFile()">💾 SALVAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<!-- ═══ SCRIPTS (ordem importa) ═══ -->
+<script src="js/core.js"></script>
+<script src="js/apikeys.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/editor.js"></script>
+
+<script>
+// ── BOOT ──────────────────────────────────────────────
+(function init() {
+  loadKeys();
+  buildTabs();
+  updateBadges();
+  renderDashboard();
+  renderChatMessages();
+  updateConnStatus();
+
+  if (isConfigured()) {
+    _el("setup-screen").classList.remove("show");
+    _el("config-btn").classList.add("configured");
+    _el("config-btn").textContent = "✓ KEYS";
+    updateFormStatuses();
+    addLog("success", "CONFIG", "API Keys carregadas do localStorage");
+  }
+})();
+</script>
+</body>
+</html>
