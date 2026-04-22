@@ -74,7 +74,7 @@ function renderDashboard() {
     metricBox("Supabase",     sb.status,           statusColor(sb.status),           sb.latency + "ms latência") +
     metricBox("Erros 24h",    STATE.errors.length, STATE.errors.length > 0 ? COLORS.red   : COLORS.green, STATE.errors.length > 0 ? "requer atenção" : "tudo normal") +
     metricBox("Pendentes",    STATE.pending.length,STATE.pending.length > 0 ? COLORS.yellow: COLORS.green,"ações aguardando") +
-    metricBox("CPU",          Math.round(m.cpu)+"%", cpuColor(m.cpu), "Render worker");
+    metricBox("Último Deploy", r.lastDeploy, undefined, "Render");
   _renderMetricBars("dash-bars");
   _el("workflows-list").innerHTML = STATE.workflows.map(w =>
     listRow(statusColor(w.status), w.status === "running", w.name, w.ago + " · " + w.duration, badge(w.status))
@@ -114,16 +114,21 @@ function renderGithub() {
   _el("github-metrics").innerHTML =
     metricBox("Branch", g.branch) + metricBox("Último Commit", g.lastCommit) + metricBox("SHA", g.sha) +
     metricBox("CI Status", g.ci, statusColor(g.ci)) + metricBox("PRs Abertos", g.openPRs) + metricBox("Issues Open", g.issues);
-  _el("pr-list").innerHTML = [
-    { title:"feat: JWT refresh token",       branch:"feature/jwt",       status:"open",    reviews:2 },
-    { title:"fix: Supabase connection pool", branch:"fix/pool",          status:"pending", reviews:0 },
-    { title:"autofix/error-001 [AGENTE]",    branch:"autofix/error-001", status:"open",    reviews:0 },
-  ].map(pr => listRow(statusColor(pr.status), false, pr.title, "← " + pr.branch + " · " + pr.reviews + " reviews", badge(pr.status))).join("");
-  _el("issues-list").innerHTML = [
-    { title:"Memory leak no worker process",    priority:"high"   },
-    { title:"Rate limiting não funciona em prod", priority:"medium" },
-    { title:"Paginação na API /users",          priority:"low"    },
-  ].map(i => listRow(statusColor(i.priority), false, i.title, null, badge(i.priority))).join("");
+
+  // PRs e Issues reais via agente
+  _el("pr-list").innerHTML = `<div style="padding:12px;color:var(--text-dim);font-size:10px;">
+    Peça ao agente: "liste os PRs abertos" para ver dados reais.
+  </div>`;
+  _el("issues-list").innerHTML = `<div style="padding:12px;color:var(--text-dim);font-size:10px;">
+    Peça ao agente: "liste as issues abertas" para ver dados reais.
+  </div>`;
+
+  // Workflows reais (se disponíveis)
+  if (STATE.workflows && STATE.workflows.length > 0) {
+    _el("pr-list").innerHTML = STATE.workflows.map(w =>
+      listRow(statusColor(w.status), w.status==="in_progress", w.name, w.ago + " · " + w.duration, badge(w.status))
+    ).join("");
+  }
 }
 
 /* ── RENDER TAB ──────────────────────────────────── */
@@ -134,11 +139,9 @@ function renderRenderTab() {
     metricBox("URL", r.url) + metricBox("Região", r.region) +
     metricBox("Último Deploy", r.lastDeploy) + metricBox("Plano", "Starter");
   _renderMetricBars("render-bars");
-  _el("deploys-list").innerHTML = [
-    { commit:"abc1234", msg:"fix: auth middleware",  status:"live",    time:"há 2h", dur:"3m 42s" },
-    { commit:"def5678", msg:"feat: rate limiting",   status:"success", time:"há 6h", dur:"4m 01s" },
-    { commit:"ghi9012", msg:"chore: update deps",    status:"failed",  time:"há 1d", dur:"1m 23s" },
-  ].map(d => listRow(statusColor(d.status), false, d.msg, d.commit + " · " + d.time + " · " + d.dur, badge(d.status))).join("");
+  _el("deploys-list").innerHTML = `<div style="padding:12px;color:var(--text-dim);font-size:10px;">
+    Peça ao agente: "mostre os últimos deploys do Render" para ver dados reais.
+  </div>`;
 }
 
 /* ── SUPABASE ────────────────────────────────────── */
@@ -149,19 +152,9 @@ function renderSupabase() {
     metricBox("Latência", sb.latency + "ms", sb.latency > 1000 ? COLORS.red : undefined) +
     metricBox("Tabelas", sb.tables) + metricBox("Registros", sb.rows) +
     metricBox("Storage", sb.storage) + metricBox("Connections", sb.connections);
-  _el("tables-list").innerHTML = [
-    { name:"users",            rows:"12,432",  size:"8.2 MB",  rls:true  },
-    { name:"sessions",         rows:"89,201",  size:"34.1 MB", rls:true  },
-    { name:"posts",            rows:"3,891",   size:"12.7 MB", rls:true  },
-    { name:"analytics_events", rows:"421,002", size:"67.4 MB", rls:false },
-  ].map(t =>
-    `<div class="list-row">
-      <code style="color:var(--accent);flex:1;font-size:10px;">${escHtml(t.name)}</code>
-      <span class="row-sub">${escHtml(t.rows)}</span>
-      <span class="row-sub" style="margin-left:10px;">${escHtml(t.size)}</span>
-      <span style="margin-left:10px;">${badge(t.rls ? "RLS ON" : "RLS OFF", t.rls ? COLORS.green : COLORS.red)}</span>
-    </div>`
-  ).join("");
+  _el("tables-list").innerHTML = `<div style="padding:12px;color:var(--text-dim);font-size:10px;">
+    Peça ao agente: "liste as tabelas do Supabase" para ver dados reais.
+  </div>`;
 }
 
 /* ── LOGS ────────────────────────────────────────── */
