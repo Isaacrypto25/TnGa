@@ -49,7 +49,7 @@ function setKeyStatus(service, status, text) {
 function updateFormStatuses() {
   if (KEYS.anthropic) setKeyStatus("anthropic", KEYS.anthropic.length > 10 ? "ok" : "none", KEYS.anthropic.length > 10 ? "✓ salva" : "");
   if (KEYS.github)    setKeyStatus("github",    KEYS.github.length > 5    ? "ok" : "none", KEYS.github.length > 5    ? "✓ salvo" : "");
-  if (KEYS.render)    setKeyStatus("render",    KEYS.render.length > 5    ? "ok" : "none", KEYS.render.length > 5    ? "✓ salvo" : "");
+  if (KEYS.render)    setKeyStatus("render",    KEYS.render.length > 5    ? "ok" : "none", KEYS.render.length > 5    ? "✓ salvo (não testável via browser)" : "");
   if (KEYS.supabase)  setKeyStatus("supabase",  KEYS.supabase.length > 10 ? "ok" : "none", KEYS.supabase.length > 10 ? "✓ salva" : "");
 }
 
@@ -112,29 +112,8 @@ async function testGithubKey() {
   btn.disabled = false; btn.textContent = "TESTAR";
 }
 
-async function testRenderKey() {
-  const key = _el("key-render").value.trim();
-  if (!key) { alert("Cole sua Render API Key primeiro."); return; }
-  const btn = _el("test-render");
-  btn.disabled = true; btn.textContent = "TESTANDO...";
-  setKeyStatus("render", "loading", "testando...");
-  try {
-    const res = await fetch("https://api.render.com/v1/services?limit=1", {
-      headers: { Authorization: "Bearer " + key }
-    });
-    if (res.ok) {
-      setKeyStatus("render", "ok", "✓ conectado");
-      _el("key-render").className = "api-input valid";
-    } else {
-      setKeyStatus("render", "fail", "✗ " + res.status);
-      _el("key-render").className = "api-input error";
-    }
-  } catch(e) {
-    setKeyStatus("render", "fail", "✗ erro de rede");
-    _el("key-render").className = "api-input error";
-  }
-  btn.disabled = false; btn.textContent = "TESTAR";
-}
+// testRenderKey removido — API do Render bloqueia CORS no browser.
+// O status é definido automaticamente ao salvar.
 
 async function testSupabaseKey() {
   const url = _el("key-supabase-url").value.trim();

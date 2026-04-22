@@ -4,7 +4,7 @@
 ═══════════════════════════════════════════════════════ */
 
 const ANTHROPIC_API   = "https://api.anthropic.com/v1/messages";
-const MODEL           = "claude-sonnet-4-5";
+const MODEL           = "claude-sonnet-4-20250514";
 const HIGH_RISK_TOOLS = ["github_create_pr","render_trigger_deploy","supabase_run_migration"];
 
 const COLORS = {
