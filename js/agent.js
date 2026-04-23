@@ -359,8 +359,9 @@ async function sendAgent(){
         if(block.type==="tool_use") toolUses.push(block);
       }
 
-      // 4. Se não há tools ou end_turn, termina
-      if(data.stop_reason==="end_turn"||toolUses.length===0) break;
+      // 4. ★ FIX CRITICAL: Se há toolUses, SEMPRE processar (mesmo com end_turn)
+      //    antes de quebrar o loop. Caso contrário fica tool_use sem tool_result.
+      if(toolUses.length===0) break;
 
       // 5. ★ FIX CORE: Executa TODAS as tools e coleta tool_results
       //    Inclusive high-risk — sempre retorna tool_result não-vazio
@@ -417,8 +418,8 @@ async function sendAgent(){
       // 6. Adiciona todos os tool_results no histórico como mensagem do user
       STATE.agentHistory.push({role:"user",content:toolResults});
 
-      // 7. ★ FIX 4: Se TODAS eram high-risk, para — sem resultado real para continuar
-      if(allHighRisk) break;
+      // 7. ★ FIX 5: Se TODAS eram high-risk OU API sinalizou end_turn, para
+      if(allHighRisk || data.stop_reason==="end_turn") break;
     }
 
     if(!fullReply) fullReply="Concluído.";
