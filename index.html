@@ -9,6 +9,8 @@
   <title>🦀 Claw DevOps Agent v3</title>
   <link rel="stylesheet" href="css/main.css"/>
   <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/mobile.css"/>
+  <link rel="stylesheet" href="css/advanced-features.css"/>
   <link rel="stylesheet" href="css/agent.css"/>
 </head>
 <body>
@@ -148,7 +150,9 @@
 
   <!-- ══ HEADER ══════════════════════════════════════ -->
   <div id="header">
-    <div id="header-logo">
+    <button id="menu-toggle" class="menu-toggle" onclick="toggleMenu()">☰</button>
+    
+    <div id="header-logo" class="header-logo-main">
       <span class="logo-icon">🦀</span>
       <div class="logo-text">
         <div class="logo-title">CLAW <span>v3</span></div>
@@ -159,9 +163,93 @@
     <div id="conn-status"></div>
 
     <div id="header-right">
+      <button id="search-toggle" class="header-btn" onclick="toggleCommandPalette()">🔍</button>
+      <button id="notifications-toggle" class="header-btn" onclick="toggleNotifications()">
+        🔔
+        <span id="notif-badge" class="notif-badge" style="display:none;">0</span>
+      </button>
       <span id="agent-status-badge"></span>
       <button id="config-btn" onclick="openApiModal()">⚙ KEYS</button>
     </div>
+  </div>
+
+  <!-- ══ SIDE DRAWER (MOBILE MENU) ═════════════════ -->
+  <div id="drawer-overlay" class="drawer-overlay" onclick="if(event.target===this)closeDrawer()"></div>
+  <div id="side-drawer" class="side-drawer">
+    <div class="drawer-header">
+      <div class="drawer-logo">
+        <span class="logo-icon">🦀</span>
+        <div>
+          <div class="logo-title">CLAW</div>
+          <div style="font-size:7px;color:var(--text-dim);">DevOps</div>
+        </div>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <div class="drawer-menu" id="drawer-menu">
+      <button class="drawer-item" onclick="switchTab('dashboard');closeDrawer()">
+        <span>⬡</span>
+        <span>Dashboard</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('github');closeDrawer()">
+        <span>◈</span>
+        <span>GitHub</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('render');closeDrawer()">
+        <span>◉</span>
+        <span>Render</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('supabase');closeDrawer()">
+        <span>◆</span>
+        <span>Supabase</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('logs');closeDrawer()">
+        <span>≡</span>
+        <span>Logs</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('errors');closeDrawer()">
+        <span>⚠</span>
+        <span>Erros</span>
+      </button>
+      <button class="drawer-item" onclick="switchTab('chat');closeDrawer()">
+        <span>💬</span>
+        <span>Chat</span>
+      </button>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="drawer-tools-btn" onclick="toggleDrawerTools()">⚙ FERRAMENTAS</button>
+      <div class="drawer-tools" id="drawer-tools" style="display:none;">
+        <button class="drawer-tool-item" onclick="toggleTheme();closeDrawer()">🌙 Tema</button>
+        <button class="drawer-tool-item" onclick="exportData()">📥 Exportar</button>
+        <button class="drawer-tool-item" onclick="clearAllKeys();closeDrawer()">🗑 Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COMMAND PALETTE ════════════════════════════ -->
+  <div id="command-palette" class="command-palette" style="display:none;">
+    <div class="command-header">
+      <input id="command-search" class="command-input" type="text" placeholder="/ buscar comando..." 
+        onkeydown="handleCommandPaletteKey(event)" oninput="filterCommands(this.value)">
+      <button class="command-close" onclick="toggleCommandPalette()">✕</button>
+    </div>
+    <div class="command-list" id="command-list"></div>
+  </div>
+
+  <!-- ══ NOTIFICATIONS PANEL ═══════════════════════ -->
+  <div id="notifications-panel" class="notifications-panel" style="display:none;">
+    <div class="notif-header">
+      <h3>🔔 Notificações</h3>
+      <button onclick="clearNotifications()">Limpar</button>
+    </div>
+    <div class="notif-list" id="notif-list"></div>
+  </div>
+
+  <!-- ══ QUICK ACTIONS ══════════════════════════════ -->
+  <div id="quick-actions-modal" class="quick-actions">
+    <div class="qa-grid" id="qa-grid"></div>
   </div>
 
   <!-- ══ CONTENT (panels + tabs) ══════════════════════ -->
@@ -352,6 +440,8 @@
 
 <!-- Scripts -->
 <script src="js/core.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/tools.js"></script>
 <script src="js/apikeys.js"></script>
 <script src="js/agent.js"></script>
 <script src="js/editor.js"></script>

@@ -47,9 +47,10 @@ html, body {
   background: rgba(8,12,18,0.96); backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 14px; gap: 10px;
+  display: flex; align-items: center; padding: 0 12px; gap: 8px;
   flex-shrink: 0; z-index: 100;
   box-shadow: 0 1px 0 rgba(217,119,87,0.08), 0 4px 20px rgba(0,0,0,0.4);
+  flex-wrap: wrap;
 }
 #header-logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .logo-icon { font-size: 22px; animation: crabPulse 4s ease-in-out infinite; }
@@ -58,8 +59,9 @@ html, body {
 .logo-title { font-family: var(--font-display); font-size: 16px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); line-height: 1; }
 .logo-title span { color: var(--copper); }
 .logo-sub { font-size: 7px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.header-logo-main { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 #conn-status { flex: 1; display: flex; gap: 5px; flex-wrap: wrap; overflow: hidden; min-width: 0; }
-#header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+#header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 #agent-status-badge { display: none; font-size: 8px; font-weight: 700; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 20px; }
 
 #config-btn {

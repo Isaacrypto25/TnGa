@@ -1,0 +1,443 @@
+/* ═══════════════════════════════════════════════════════
+   CLAW DevOps Agent v3 — advanced-features.css
+   Advanced visual enhancements: animations, gradients,
+   glassmorphism, neon effects, micro-interactions
+═══════════════════════════════════════════════════════ */
+
+/* ── GLASSMORPHISM ────────────────────────────────– */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ── NEON GLOW EFFECTS ────────────────────────────– */
+.neon-green {
+  text-shadow: 0 0 7px var(--green), 0 0 14px var(--green);
+  color: var(--green);
+}
+
+.neon-copper {
+  text-shadow: 0 0 7px var(--copper), 0 0 14px var(--copper);
+  color: var(--copper);
+}
+
+.neon-blue {
+  text-shadow: 0 0 7px var(--accent), 0 0 14px var(--accent);
+  color: var(--accent);
+}
+
+.glow-box {
+  box-shadow: 0 0 20px rgba(15, 217, 138, 0.3), inset 0 0 20px rgba(15, 217, 138, 0.05);
+}
+
+.glow-box.danger {
+  box-shadow: 0 0 20px rgba(244, 48, 96, 0.3), inset 0 0 20px rgba(244, 48, 96, 0.05);
+}
+
+.glow-box.warning {
+  box-shadow: 0 0 20px rgba(245, 166, 35, 0.3), inset 0 0 20px rgba(245, 166, 35, 0.05);
+}
+
+/* ── MICRO-INTERACTIONS ───────────────────────––– */
+.tap-scale {
+  transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tap-scale:active {
+  transform: scale(0.96);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.pulse-attention {
+  animation: pulseAttention 1s ease-in-out infinite;
+}
+
+@keyframes pulseAttention {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ── SKELETON LOADING ────────────────────────––– */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg3) 0%,
+    var(--border) 50%,
+    var(--bg3) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* ── STATUS INDICATORS ───────────────────────––– */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+.status-indicator.online {
+  background: var(--green);
+}
+
+.status-indicator.offline {
+  background: var(--red);
+}
+
+.status-indicator.idle {
+  background: var(--yellow);
+  animation: none;
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(15, 217, 138, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(15, 217, 138, 0);
+  }
+}
+
+/* ── DATA VISUALIZATION ───────────────────────– */
+.chart-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chart-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.chart-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.chart-label {
+  font-size: 8px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── PROGRESS INDICATORS ──────────────────────– */
+.progress-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform-origin: 50% 50%;
+}
+
+.progress-linear {
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-linear-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 2px;
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* ── CODE BLOCKS ──────────────────────────────– */
+.code-block {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 1.5;
+}
+
+.code-block code {
+  color: var(--green);
+}
+
+.code-block .string {
+  color: var(--cyan);
+}
+
+.code-block .number {
+  color: var(--yellow);
+}
+
+.code-block .keyword {
+  color: var(--purple);
+}
+
+/* ── FLOATING ACTION BUTTONS ──────────────────– */
+.fab {
+  position: fixed;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 50;
+}
+
+.fab:active {
+  transform: scale(0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.fab:hover {
+  box-shadow: 0 6px 20px rgba(217, 119, 87, 0.4);
+}
+
+.fab.bottom-right {
+  bottom: calc(80px + var(--safe-b));
+  right: 16px;
+}
+
+/* ── MODAL IMPROVEMENTS ───────────────────────– */
+.modal-backdrop.show {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content.show {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ── BADGE ANIMATIONS ────────────────────────– */
+.badge-pulse {
+  animation: badge-pulse-anim 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse-anim {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.badge-new {
+  background: linear-gradient(135deg, var(--red), #ff6b7a);
+  color: white;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ── DARK MODE TRANSITIONS ──────────────────– */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ── UTILITY ANIMATIONS ─────────────────────– */
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ── ENHANCED BUTTONS ────────────────────────– */
+.btn-gradient {
+  background: linear-gradient(135deg, var(--copper), #e8885a);
+  color: white;
+  border: none;
+  font-weight: 700;
+}
+
+.btn-gradient:hover {
+  box-shadow: 0 8px 24px rgba(217, 119, 87, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-outline:hover {
+  background: rgba(47, 120, 240, 0.1);
+}
+
+/* ── PRINT STYLES ───────────────────────────– */
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  .print-visible {
+    display: block !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .card {
+    page-break-inside: avoid;
+  }
+}
+
+/* ── PREFERS DARK MODE ──────────────────────– */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    filter: invert(0);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .auto-dark {
+    filter: invert(1);
+  }
+}
